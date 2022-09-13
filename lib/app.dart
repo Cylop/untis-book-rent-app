@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:untis_book_rent_app/pages/homepage/homepage.dart';
-import 'package:untis_book_rent_app/pages/homepage/screens/login_screen.dart';
+import 'package:untis_book_rent_app/ui/pages/homepage/homepage.dart';
+import 'package:untis_book_rent_app/ui/pages/homepage/screens/login_screen.dart';
 
 class Application extends StatelessWidget {
   const Application({super.key});

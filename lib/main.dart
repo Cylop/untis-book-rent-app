@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:untis_book_rent_app/api/api_service.dart';
-import 'package:untis_book_rent_app/api/dto/user.dart';
-import 'package:untis_book_rent_app/api/services/userservice.dart';
+import 'package:untis_book_rent_app/api/dto/user/user.dart';
+import 'package:untis_book_rent_app/api/services/user_service.dart';
 import 'package:untis_book_rent_app/app.dart';
+import 'package:untis_book_rent_app/injection.dart';
 
 extension Typing<T> on List<T> {
   /// Provide access to the generic type at runtime.
@@ -10,12 +11,12 @@ extension Typing<T> on List<T> {
 }
 
 void main() async {
-  AbstractApiService<User, int, CreateUserDto, UpdateUserDto, CreateUserDto>
+  /*AbstractApiService<User, int, CreateUserDto, UpdateUserDto, CreateUserDto>
       userApi = UserService(endpoint: 'users');
   var users = await userApi.getAllEntities();
-  debugPrint(users.toString());
-
+  debugPrint(users.toString());*/
   WidgetsFlutterBinding.ensureInitialized();
+  configureDependencies();
   //Routes.createRoutes();
   runApp(
     /*MultiProvider(
