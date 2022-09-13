@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:untis_book_rent_app/api/api_service.dart';
-import 'package:untis_book_rent_app/api/dto/user/user.dart';
-import 'package:untis_book_rent_app/api/services/user_service.dart';
 import 'package:untis_book_rent_app/app.dart';
 import 'package:untis_book_rent_app/injection.dart';
 

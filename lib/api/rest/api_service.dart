@@ -10,18 +10,15 @@ abstract class BaseApiClient {
   });
 }
 
-abstract class AbstractApiService<
-    ResultDto extends Decodeable,
-    Id,
-    CreateDto,
-    UpdateDto,
-    DeleteDto> extends GenericObject<ResultDto> implements BaseApiClient {
+abstract class AbstractApiClient<ResultDto extends Decodeable>
+    extends GenericObject<ResultDto> implements BaseApiClient {
   Dio dio = Dio();
 
-  String baseUrl = 'http://localhost:3000/api/v1/';
+  String baseUrl = 'http://localhost:3000';
+  String apiSegment = '/api/v1/';
   final String endpoint;
 
-  AbstractApiService(
+  AbstractApiClient(
       {String? baseUrl,
       required this.endpoint,
       required Create<Decodeable> create})
@@ -29,63 +26,7 @@ abstract class AbstractApiService<
     if (baseUrl != null) this.baseUrl = baseUrl;
   }
 
-  Future<List<ResultDto>> getAllEntities() async {
-    var response = await request(
-        httpMethod: HttpMethod.get,
-        create: () => ApiListResponse<ResultDto>(create: () => create()));
-
-    final results = response.response?.data ?? [];
-    return results;
-  }
-
-  Future<ResultDto> getEntityById(Id id) async {
-    var response = await request(
-      httpMethod: HttpMethod.get,
-      create: () => ApiResponse<ResultDto>(create: () => create()),
-      config: RequestOptions(path: getUrl() + "/" + id),
-    );
-
-    final user = response.response?.data;
-    if (user == null) {
-      throw ApiResponseException(message: "Entity with id $id doesn't exist");
-    }
-    return user;
-  }
-
-  Future<ResultDto> createEntity(CreateDto? value) async {
-    var response = await request(
-      httpMethod: HttpMethod.post,
-      create: () => ApiResponse<ResultDto>(create: () => create()),
-      data: value,
-    );
-
-    final user = response.response!.data;
-    return user;
-  }
-
-  Future<ResultDto> deleteEntity(Id id, CreateDto? value) async {
-    var response = await request(
-      httpMethod: HttpMethod.delete,
-      create: () => ApiResponse<ResultDto>(create: () => create()),
-      config: RequestOptions(path: getUrl() + "/" + id),
-    );
-
-    final user = response.response!.data;
-    return user;
-  }
-
-  Future<ResultDto> updateEntity(Id id, UpdateDto value) async {
-    var response = await request(
-      httpMethod: HttpMethod.put,
-      create: () => ApiResponse<ResultDto>(create: () => create()),
-      config: RequestOptions(path: getUrl() + "/" + id),
-    );
-
-    final user = response.response!.data;
-    return user;
-  }
-
-  getUrl() => baseUrl + endpoint;
+  getUrl() => baseUrl + apiSegment + endpoint;
 
   @override
   Future<ResponseWrapper<T>> request<T extends Decodeable>({
@@ -94,7 +35,7 @@ abstract class AbstractApiService<
     dynamic data,
     RequestOptions? config,
   }) async {
-    config ??= RequestOptions(path: baseUrl + endpoint);
+    config ??= RequestOptions(path: getUrl());
     if (data != null) {
       if (httpMethod == HttpMethod.get) {
         config.queryParameters = data;
@@ -108,6 +49,81 @@ abstract class AbstractApiService<
     } on DioError catch (err) {
       throw ApiResponseException(message: err.message);
     }
+  }
+}
+
+abstract class AbstractService<ResultDto, Id, CreateDto, UpdateDto, DeleteDto> {
+  Future<List<ResultDto>> getAllEntities();
+  Future<ResultDto> getEntityById(Id id);
+  Future<ResultDto> createEntity(CreateDto? value);
+  Future<ResultDto> deleteEntity(Id id, CreateDto? value);
+  Future<ResultDto> updateEntity(Id id, UpdateDto value);
+}
+
+abstract class BasicService<ResultDto extends Decodeable, Id, CreateDto,
+        UpdateDto, DeleteDto> extends AbstractApiClient<ResultDto>
+    implements AbstractService<ResultDto, Id, CreateDto, UpdateDto, DeleteDto> {
+  BasicService({required super.endpoint, required super.create});
+
+  @override
+  Future<List<ResultDto>> getAllEntities() async {
+    var response = await request(
+        httpMethod: HttpMethod.get,
+        create: () => ApiListResponse<ResultDto>(create: () => create()));
+
+    final results = response.response?.data ?? [];
+    return results;
+  }
+
+  @override
+  Future<ResultDto> getEntityById(Id id) async {
+    var response = await request(
+      httpMethod: HttpMethod.get,
+      create: () => ApiResponse<ResultDto>(create: () => create()),
+      config: RequestOptions(path: getUrl() + "/" + id),
+    );
+
+    final entity = response.response?.data;
+    if (entity == null) {
+      throw ApiResponseException(message: "Entity with id $id doesn't exist");
+    }
+    return entity;
+  }
+
+  @override
+  Future<ResultDto> createEntity(CreateDto? value) async {
+    var response = await request(
+      httpMethod: HttpMethod.post,
+      create: () => ApiResponse<ResultDto>(create: () => create()),
+      data: value,
+    );
+
+    final entity = response.response!.data;
+    return entity;
+  }
+
+  @override
+  Future<ResultDto> deleteEntity(Id id, CreateDto? value) async {
+    var response = await request(
+      httpMethod: HttpMethod.delete,
+      create: () => ApiResponse<ResultDto>(create: () => create()),
+      config: RequestOptions(path: getUrl() + "/" + id),
+    );
+
+    final entity = response.response!.data;
+    return entity;
+  }
+
+  @override
+  Future<ResultDto> updateEntity(Id id, UpdateDto value) async {
+    var response = await request(
+      httpMethod: HttpMethod.put,
+      create: () => ApiResponse<ResultDto>(create: () => create()),
+      config: RequestOptions(path: getUrl() + "/" + id),
+    );
+
+    final entity = response.response!.data;
+    return entity;
   }
 }
 
