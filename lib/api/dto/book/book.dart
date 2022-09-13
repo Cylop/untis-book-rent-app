@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:untis_book_rent_app/api/dto/user/user.dart';
+import 'package:untis_book_rent_app/api/generic.dart';
 
 part 'book.g.dart';
 
 @JsonSerializable()
-class Book extends Equatable {
+class Book extends Equatable implements Decodeable<Book> {
   String? isbn;
   String? title;
   String? description;
@@ -37,6 +38,9 @@ class Book extends Equatable {
         publishingDate,
         createdBy,
       ];
+
+  @override
+  Book decode(data) => Book.fromJson(data);
 }
 
 @JsonSerializable()

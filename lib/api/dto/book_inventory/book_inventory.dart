@@ -1,9 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:untis_book_rent_app/api/generic.dart';
 
 part 'book_inventory.g.dart';
 
 @JsonSerializable()
-class BookInventory {
+class BookInventory extends Equatable implements Decodeable<BookInventory> {
   String? isbn;
   int? amount;
 
@@ -12,6 +14,12 @@ class BookInventory {
   factory BookInventory.fromJson(Map<String, dynamic> json) =>
       _$BookInventoryFromJson(json);
   Map<String, dynamic> toJson() => _$BookInventoryToJson(this);
+
+  @override
+  BookInventory decode(data) => BookInventory.fromJson(data);
+
+  @override
+  List<Object?> get props => [isbn, amount];
 }
 
 @JsonSerializable()

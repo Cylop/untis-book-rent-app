@@ -17,11 +17,7 @@ class User extends Equatable implements Decodeable<User> {
 
   @override
   User decode(data) {
-    return User(
-      id: data?['id'] ?? '',
-      name: data?['name'] ?? '',
-      email: data?['email'] ?? '',
-    );
+    return User.fromJson(data);
   }
 
   @override

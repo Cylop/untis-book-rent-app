@@ -1,9 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:untis_book_rent_app/api/generic.dart';
 
 part 'class.g.dart';
 
 @JsonSerializable()
-class SchoolClass {
+class SchoolClass extends Equatable implements Decodeable<SchoolClass> {
   String? name;
   String? label;
   int? studentCount;
@@ -13,6 +15,12 @@ class SchoolClass {
   factory SchoolClass.fromJson(Map<String, dynamic> json) =>
       _$SchoolClassFromJson(json);
   Map<String, dynamic> toJson() => _$SchoolClassToJson(this);
+
+  @override
+  SchoolClass decode(data) => SchoolClass.fromJson(data);
+
+  @override
+  List<Object?> get props => [name, label, studentCount];
 }
 
 @JsonSerializable()
