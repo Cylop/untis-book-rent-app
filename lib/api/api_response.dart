@@ -17,7 +17,6 @@ abstract class AbstractApiResponse<T> extends GenericObject<T>
     implements Decodeable<AbstractApiResponse<T>> {
   String path = "";
   String status = "ERROR";
-  late T data;
 
   AbstractApiResponse({required Create<Decodeable> create})
       : super(create: create);
@@ -26,33 +25,38 @@ abstract class AbstractApiResponse<T> extends GenericObject<T>
   AbstractApiResponse<T> decode(dynamic json) {
     path = json['path'];
     status = json['status'];
-    data = decodeData(json);
     return this;
   }
-
-  T decodeData(dynamic json);
 }
 
 class ApiResponse<T> extends AbstractApiResponse<T> {
   ApiResponse({required Create<Decodeable> create}) : super(create: create);
 
+  late T data;
+
   @override
-  T decodeData(dynamic json) {
-    return genericObject(json['data']);
+  ApiResponse<T> decode(dynamic json) {
+    super.decode(json);
+    data = genericObject(json['data']);
+    return this;
   }
 }
 
-class ApiListResponse<T extends List> extends AbstractApiResponse<T> {
+class ApiListResponse<T> extends AbstractApiResponse<T>
+    implements Decodeable<AbstractApiResponse<T>> {
   ApiListResponse({required Create<Decodeable> create}) : super(create: create);
 
+  late List<T> data;
+
   @override
-  T decodeData(json) {
-    var data = [];
+  ApiListResponse<T> decode(dynamic json) {
+    super.decode(json);
+    data = [];
     json['data'].forEach((item) {
-      data?.add(genericObject(item));
+      data.add(genericObject(item));
     });
 
-    return data as T;
+    return this;
   }
 }
 

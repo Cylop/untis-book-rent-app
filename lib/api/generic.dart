@@ -15,6 +15,6 @@ abstract class GenericObject<T> {
     // get create object
     final item = create();
     // now, we can call decode func from Decodeable class
-    return item.decode(data);
+    return item.decode(data) as T;
   }
 }
