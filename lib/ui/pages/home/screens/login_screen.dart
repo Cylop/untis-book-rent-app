@@ -1,6 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:untis_book_rent_app/ui/pages/homepage/screens/register_screen.dart';
+import 'package:untis_book_rent_app/ui/pages/home/screens/register_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);

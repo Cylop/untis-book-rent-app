@@ -24,6 +24,21 @@ class User extends Equatable implements Decodeable<User> {
   List<Object?> get props => [id, name, email];
 }
 
+class StateUser extends Equatable {
+  const StateUser(this.id, this.name, this.email);
+
+  final int id;
+  final String name;
+  final String email;
+
+  @override
+  List<Object> get props => [id, name, email];
+
+  static const empty = StateUser(-999999, 'unknown', 'unknown');
+  static StateUser fromUser(User user) =>
+      StateUser(user.id!, user.name!, user.email!);
+}
+
 @JsonSerializable()
 class CreateUserDto {
   final String name;
