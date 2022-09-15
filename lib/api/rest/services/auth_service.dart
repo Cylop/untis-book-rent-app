@@ -4,6 +4,12 @@ import 'package:untis_book_rent_app/api/dto/auth/auth.dart';
 import 'package:untis_book_rent_app/api/dto/user/user.dart';
 import 'package:untis_book_rent_app/api/rest/api_service.dart';
 
+abstract class AuthService {
+  Future<User> signUp(SignUpDto dto);
+  Future<User> login(SignInUserDto dto);
+  Future<void> logout();
+}
+
 class BasicAuthService extends AbstractApiClient<User> implements AuthService {
   BasicAuthService({required super.endpoint}) : super(create: () => User());
 
@@ -46,10 +52,4 @@ class BasicAuthService extends AbstractApiClient<User> implements AuthService {
         create: () => ApiResponse<User>(create: () => create()),
         config: RequestOptions(path: "$baseUrl/logout"));
   }
-}
-
-abstract class AuthService {
-  Future<User> signUp(SignUpDto dto);
-  Future<User> login(SignInUserDto dto);
-  Future<void> logout();
 }
