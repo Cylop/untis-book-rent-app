@@ -35,7 +35,7 @@ abstract class AbstractApiClient<ResultDto extends Decodeable>
     dynamic data,
     RequestOptions? config,
   }) async {
-    config ??= RequestOptions(path: getUrl());
+    config ??= RequestOptions(path: getUrl(), method: httpMethod.method);
     if (data != null) {
       if (httpMethod == HttpMethod.get) {
         config.queryParameters = data;
