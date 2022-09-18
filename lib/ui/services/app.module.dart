@@ -6,12 +6,13 @@ import 'package:untis_book_rent_app/api/rest/services/book_rent_service.dart';
 import 'package:untis_book_rent_app/api/rest/services/book_service.dart';
 import 'package:untis_book_rent_app/api/rest/services/class_service.dart';
 import 'package:untis_book_rent_app/api/rest/services/user_service.dart';
-//import 'package:untis_book_rent_app/ui/routing/router.gr.dart';
+
+import '../routing/router.gr.dart';
 
 @module
 abstract class AppModule {
-  /*@injectable
-  AppRouter get appRouter => AppRouter();*/
+  @injectable
+  AppRouter get appRouter => AppRouter();
 
   /*@preResolve
   Future<NotificationService> get notificationService async =>
