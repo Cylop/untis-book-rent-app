@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:untis_book_rent_app/injection.dart';
 import 'package:untis_book_rent_app/ui/state/auth_bloc/bloc.dart';
 import 'package:untis_book_rent_app/ui/state/auth_bloc/event.dart';
+import 'package:untis_book_rent_app/ui/state/auth_bloc/state.dart';
+import 'package:untis_book_rent_app/ui/state/repositories/auth_repository.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  static Route<void> route() {
-    return MaterialPageRoute<void>(builder: (_) => const HomePage());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +17,16 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Builder(
-              builder: (context) {
-                final userId = context.select(
-                  (AuthenticationBloc bloc) => bloc.state.user.id,
-                );
-                return Text('UserID: $userId');
+            BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              buildWhen: ((previous, current) =>
+                  previous != current &&
+                  current.status == AuthenticationStatus.authenticated),
+              builder: (BuildContext context, AuthenticationState state) {
+                if (state is! AuthAuthenticatedState) return const Text('');
+
+                final userId = state.user.id;
+                final email = state.user.email;
+                return Text('UserID: $userId with email $email');
               },
             ),
             ElevatedButton(
