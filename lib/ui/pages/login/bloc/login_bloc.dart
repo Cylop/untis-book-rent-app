@@ -2,11 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
-import 'package:untis_book_rent_app/injection.dart';
 import 'package:untis_book_rent_app/ui/pages/login/models/models.dart';
 import 'package:untis_book_rent_app/ui/state/auth_bloc/bloc.dart';
 import 'package:untis_book_rent_app/ui/state/auth_bloc/event.dart';
-import 'package:untis_book_rent_app/ui/state/auth_bloc/state.dart';
 import 'package:untis_book_rent_app/ui/state/repositories/auth_repository.dart';
 
 import 'package:formz/formz.dart';
@@ -16,9 +14,11 @@ part 'login_state.dart';
 
 @injectable
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final IAuthenticationRepository _authenticationRepository;
+  final AuthenticationBloc _authenticationBloc;
+  final AuthRepository _authRepository;
 
-  LoginBloc(this._authenticationRepository) : super(const LoginState()) {
+  LoginBloc(this._authenticationBloc, this._authRepository)
+      : super(const LoginState()) {
     on<LoginEmailChanged>(_onEmailChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onSubmitted);
@@ -57,14 +57,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       try {
-        /*var authBloc = locator<AuthenticationBloc>();
-        authBloc.add(AuthenticationLoginRequest(
+        /*var authBloc = locator<AuthenticationBloc>(); */
+        /*_authenticationBloc.add(AuthenticationLoginRequest(
             email: state.email.value, password: state.password.value));*/
-        await _authenticationRepository.logIn(
+        var user = await _authRepository.logIn(
           email: state.email.value,
           password: state.password.value,
         );
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
+        _authenticationBloc.add(UserLoggedIn(user: user));
       } catch (error) {
         debugPrint("Error for submission");
         debugPrint(error.toString());
