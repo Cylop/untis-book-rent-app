@@ -1,43 +1,51 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:untis_book_rent_app/injection.dart';
-import 'package:untis_book_rent_app/ui/state/auth_bloc/bloc.dart';
-import 'package:untis_book_rent_app/ui/state/auth_bloc/event.dart';
-import 'package:untis_book_rent_app/ui/state/auth_bloc/state.dart';
+import 'package:untis_book_rent_app/ui/routing/router.gr.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              builder: (BuildContext context, AuthenticationState state) {
-                debugPrint(
-                    'Home Page: Authstate builder state: ${state.toString()}');
-                if (state is! AuthenticationAuthenticated) {
-                  return const Text('Unknown');
-                }
+  State<HomePage> createState() => _HomePageState();
+}
 
-                final userId = state.user.id;
-                final email = state.user.email;
-                return Text('UserID: $userId with email $email');
-              },
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return AutoTabsScaffold(
+      routes: const [
+        BooksRouter(),
+        BooksRouter(),
+        BooksRouter(),
+        BooksRouter(),
+      ],
+      bottomNavigationBuilder: (_, tabsRouter) {
+        return BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
             ),
-            ElevatedButton(
-              child: const Text('Logout'),
-              onPressed: () {
-                context.read<AuthenticationBloc>().add(UserLoggedOut());
-              },
+            BottomNavigationBarItem(
+              icon: Icon(Icons.school_outlined),
+              label: 'Classes',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.menu_book),
+              label: 'Books',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_box),
+              label: 'Account',
             ),
           ],
-        ),
-      ),
+          currentIndex: tabsRouter.activeIndex,
+          onTap: tabsRouter.setActiveIndex,
+          //type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.grey,
+        );
+      },
     );
   }
 }
