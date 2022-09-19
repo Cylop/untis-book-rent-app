@@ -35,8 +35,7 @@ class BasicAuthService extends AbstractApiClient<User> implements AuthService {
       httpMethod: HttpMethod.post,
       create: () => ApiResponse<User>(create: () => create()),
       data: dto,
-      config: RequestOptions(
-          path: "$baseUrl/login", method: HttpMethod.post.method),
+      config: RequestOptions(path: "$baseUrl/login"),
     );
 
     var data = response.response?.data;
