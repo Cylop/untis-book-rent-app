@@ -4,36 +4,34 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untis_book_rent_app/ui/pages/splash/splash.dart';
 import 'package:untis_book_rent_app/ui/routing/router.gr.dart';
 import 'package:untis_book_rent_app/ui/state/auth_bloc/bloc.dart';
+import 'package:untis_book_rent_app/ui/state/auth_bloc/event.dart';
 import 'package:untis_book_rent_app/ui/state/auth_bloc/state.dart';
-import 'package:untis_book_rent_app/ui/state/repositories/auth_repository.dart';
 
 import 'injection.dart';
 
 class Application extends StatelessWidget {
   Application({super.key});
 
-  final _navigatorKey = GlobalKey<NavigatorState>();
-
   final _appRouter = locator<AppRouter>();
-  // This widget is the root of your application.
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => locator<AuthenticationBloc>(),
+      create: (context) => locator<AuthenticationBloc>()..add(AppLoaded()),
       child: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (BuildContext context, state) {
           debugPrint('State listener ${state.status.toString()}');
           switch (state.status) {
-            case AuthenticationStatus.authenticated:
+            case AuthState.authenticated:
               _appRouter.replaceAll([const HomeRoute()]);
               break;
-            case AuthenticationStatus.unauthenticated:
+            case AuthState.unauthenticated:
+            case AuthState.failure:
               _appRouter.replaceAll([const LoginRoute()]);
               break;
-            case AuthenticationStatus.unknown:
-            case AuthenticationStatus.loggingIn:
-            case AuthenticationStatus.loggingOut:
+            case AuthState.unknown:
+            case AuthState.initial:
+            case AuthState.loading:
               break;
           }
         },
