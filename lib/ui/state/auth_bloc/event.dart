@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:untis_book_rent_app/ui/state/repositories/auth_repository.dart';
+import 'package:untis_book_rent_app/api/dto/user/user.dart';
 
 abstract class AuthenticationEvent extends Equatable {
   const AuthenticationEvent();
@@ -9,28 +8,15 @@ abstract class AuthenticationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AuthenticationStatusChanged extends AuthenticationEvent {
-  AuthenticationStatusChanged(this.status) {
-    debugPrint('Status changed to ${status.name}');
-  }
+class AppLoaded extends AuthenticationEvent {}
 
-  final AuthenticationStatus status;
+class UserLoggedIn extends AuthenticationEvent {
+  final StateUser user;
 
-  @override
-  List<Object> get props => [status];
-}
-
-class AuthenticationLoginRequest extends AuthenticationEvent {
-  final String email;
-  final String password;
-
-  const AuthenticationLoginRequest({
-    required this.email,
-    required this.password,
-  });
+  const UserLoggedIn({required this.user});
 
   @override
-  List<Object> get props => [email, password];
+  List<Object> get props => [user];
 }
 
-class AuthenticationLogoutRequested extends AuthenticationEvent {}
+class UserLoggedOut extends AuthenticationEvent {}
