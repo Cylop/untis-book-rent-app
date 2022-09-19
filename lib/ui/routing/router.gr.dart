@@ -28,51 +28,82 @@ class AppRouter extends _i6.RootStackRouter {
   final Map<String, _i6.PageFactory> pagesMap = {
     AppView.name: (routeData) {
       return _i6.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i1.AppView());
+        routeData: routeData,
+        child: const _i1.AppView(),
+      );
     },
     LoginRoute.name: (routeData) {
       return _i6.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i2.LoginPage());
+        routeData: routeData,
+        child: const _i2.LoginPage(),
+      );
     },
     HomeRoute.name: (routeData) {
       return _i6.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i3.HomePage());
+        routeData: routeData,
+        child: const _i3.HomePage(),
+      );
     },
     BooksRouter.name: (routeData) {
       return _i6.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i4.EmptyRouterPage());
+        routeData: routeData,
+        child: const _i4.EmptyRouterPage(),
+      );
     },
     BooksRoute.name: (routeData) {
       return _i6.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i5.BooksPage());
-    }
+        routeData: routeData,
+        child: const _i5.BooksPage(),
+      );
+    },
   };
 
   @override
   List<_i6.RouteConfig> get routes => [
-        _i6.RouteConfig(AppView.name, path: '/'),
-        _i6.RouteConfig(LoginRoute.name, path: '/'),
-        _i6.RouteConfig(HomeRoute.name, path: '/', children: [
-          _i6.RouteConfig(BooksRouter.name,
+        _i6.RouteConfig(
+          AppView.name,
+          path: '/',
+        ),
+        _i6.RouteConfig(
+          LoginRoute.name,
+          path: '/',
+        ),
+        _i6.RouteConfig(
+          HomeRoute.name,
+          path: '/',
+          children: [
+            _i6.RouteConfig(
+              BooksRouter.name,
               path: 'books',
               parent: HomeRoute.name,
               children: [
-                _i6.RouteConfig(BooksRoute.name,
-                    path: '', parent: BooksRouter.name),
-                _i6.RouteConfig('*#redirect',
-                    path: '*',
-                    parent: BooksRouter.name,
-                    redirectTo: '',
-                    fullMatch: true)
-              ])
-        ])
+                _i6.RouteConfig(
+                  BooksRoute.name,
+                  path: '',
+                  parent: BooksRouter.name,
+                ),
+                _i6.RouteConfig(
+                  '*#redirect',
+                  path: '*',
+                  parent: BooksRouter.name,
+                  redirectTo: '',
+                  fullMatch: true,
+                ),
+              ],
+            )
+          ],
+        ),
       ];
 }
 
 /// generated route for
 /// [_i1.AppView]
 class AppView extends _i6.PageRouteInfo<void> {
-  const AppView() : super(AppView.name, path: '/');
+  const AppView()
+      : super(
+          AppView.name,
+          path: '/',
+        );
 
   static const String name = 'AppView';
 }
@@ -80,7 +111,11 @@ class AppView extends _i6.PageRouteInfo<void> {
 /// generated route for
 /// [_i2.LoginPage]
 class LoginRoute extends _i6.PageRouteInfo<void> {
-  const LoginRoute() : super(LoginRoute.name, path: '/');
+  const LoginRoute()
+      : super(
+          LoginRoute.name,
+          path: '/',
+        );
 
   static const String name = 'LoginRoute';
 }
@@ -89,7 +124,11 @@ class LoginRoute extends _i6.PageRouteInfo<void> {
 /// [_i3.HomePage]
 class HomeRoute extends _i6.PageRouteInfo<void> {
   const HomeRoute({List<_i6.PageRouteInfo>? children})
-      : super(HomeRoute.name, path: '/', initialChildren: children);
+      : super(
+          HomeRoute.name,
+          path: '/',
+          initialChildren: children,
+        );
 
   static const String name = 'HomeRoute';
 }
@@ -98,7 +137,11 @@ class HomeRoute extends _i6.PageRouteInfo<void> {
 /// [_i4.EmptyRouterPage]
 class BooksRouter extends _i6.PageRouteInfo<void> {
   const BooksRouter({List<_i6.PageRouteInfo>? children})
-      : super(BooksRouter.name, path: 'books', initialChildren: children);
+      : super(
+          BooksRouter.name,
+          path: 'books',
+          initialChildren: children,
+        );
 
   static const String name = 'BooksRouter';
 }
@@ -106,7 +149,11 @@ class BooksRouter extends _i6.PageRouteInfo<void> {
 /// generated route for
 /// [_i5.BooksPage]
 class BooksRoute extends _i6.PageRouteInfo<void> {
-  const BooksRoute() : super(BooksRoute.name, path: '');
+  const BooksRoute()
+      : super(
+          BooksRoute.name,
+          path: '',
+        );
 
   static const String name = 'BooksRoute';
 }
