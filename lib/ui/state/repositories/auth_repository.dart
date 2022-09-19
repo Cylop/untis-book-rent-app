@@ -17,16 +17,9 @@ class AuthenticationRepository implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    try {
-      var user = await _authService
-          .login(SignInUserDto(email: email, password: password));
-      return StateUser.fromUser(user);
-    } catch (error) {
-      debugPrint("Login error");
-      debugPrint(error.toString());
-    }
-
-    return StateUser.empty;
+    var user = await _authService
+        .login(SignInUserDto(email: email, password: password));
+    return StateUser.fromUser(user);
   }
 
   @override
