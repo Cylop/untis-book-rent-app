@@ -36,6 +36,7 @@ abstract class AbstractApiClient<ResultDto extends Decodeable>
     RequestOptions? config,
   }) async {
     config ??= RequestOptions(path: getUrl(), method: httpMethod.method);
+    config.method = httpMethod.method;
     if (data != null) {
       if (httpMethod == HttpMethod.get) {
         config.queryParameters = data;

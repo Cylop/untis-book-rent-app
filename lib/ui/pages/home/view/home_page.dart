@@ -4,7 +4,6 @@ import 'package:untis_book_rent_app/injection.dart';
 import 'package:untis_book_rent_app/ui/state/auth_bloc/bloc.dart';
 import 'package:untis_book_rent_app/ui/state/auth_bloc/event.dart';
 import 'package:untis_book_rent_app/ui/state/auth_bloc/state.dart';
-import 'package:untis_book_rent_app/ui/state/repositories/auth_repository.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -18,11 +17,12 @@ class HomePage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              buildWhen: ((previous, current) =>
-                  previous != current &&
-                  current.status == AuthenticationStatus.authenticated),
               builder: (BuildContext context, AuthenticationState state) {
-                if (state is! AuthAuthenticatedState) return const Text('');
+                debugPrint(
+                    'Home Page: Authstate builder state: ${state.toString()}');
+                if (state is! AuthenticationAuthenticated) {
+                  return const Text('Unknown');
+                }
 
                 final userId = state.user.id;
                 final email = state.user.email;
@@ -32,9 +32,7 @@ class HomePage extends StatelessWidget {
             ElevatedButton(
               child: const Text('Logout'),
               onPressed: () {
-                context
-                    .read<AuthenticationBloc>()
-                    .add(AuthenticationLogoutRequested());
+                context.read<AuthenticationBloc>().add(UserLoggedOut());
               },
             ),
           ],

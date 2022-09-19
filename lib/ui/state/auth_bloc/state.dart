@@ -2,48 +2,54 @@ import 'package:equatable/equatable.dart';
 import 'package:untis_book_rent_app/api/dto/user/user.dart';
 import 'package:untis_book_rent_app/ui/state/repositories/auth_repository.dart';
 
-class AuthenticationState extends Equatable {
-  const AuthenticationState._({
-    this.status = AuthenticationStatus.unknown,
+enum AuthState {
+  unknown,
+  initial,
+  loading,
+  authenticated,
+  unauthenticated,
+  failure,
+}
+
+abstract class AuthenticationState extends Equatable {
+  final AuthState status;
+  const AuthenticationState({
+    this.status = AuthState.unknown,
   });
-
-  const AuthenticationState.unknown() : this._();
-
-  const AuthenticationState.authenticated()
-      : this._(status: AuthenticationStatus.authenticated);
-
-  const AuthenticationState.loggingOut()
-      : this._(status: AuthenticationStatus.loggingOut);
-
-  const AuthenticationState.unauthenticated()
-      : this._(status: AuthenticationStatus.unauthenticated);
-
-  final AuthenticationStatus status;
 
   @override
   List<Object> get props => [status];
 }
 
-class AuthLoginState extends AuthenticationState {
-  late final SignInUserDto signInUserDto;
-
-  AuthLoginState({required String email, required String password})
-      : super._(status: AuthenticationStatus.loggingIn) {
-    signInUserDto = SignInUserDto(email: email, password: password);
-  }
-
-  @override
-  List<Object> get props => [status, signInUserDto];
+class AuthenticationInitial extends AuthenticationState {
+  const AuthenticationInitial() : super(status: AuthState.initial);
 }
 
-class AuthAuthenticatedState extends AuthenticationState {
-  final StateUser _user;
+class AuthenticationLoading extends AuthenticationState {
+  const AuthenticationLoading() : super(status: AuthState.loading);
+}
 
-  const AuthAuthenticatedState(this._user)
-      : super._(status: AuthenticationStatus.authenticated);
+class AuthenticationUnAuthenticated extends AuthenticationState {
+  const AuthenticationUnAuthenticated()
+      : super(status: AuthState.unauthenticated);
+}
 
-  StateUser get user => _user;
+class AuthenticationAuthenticated extends AuthenticationState {
+  final StateUser user;
+
+  const AuthenticationAuthenticated({required this.user})
+      : super(status: AuthState.authenticated);
 
   @override
-  List<Object> get props => [status, _user];
+  List<Object> get props => [status, user];
+}
+
+class AuthenticationFailure extends AuthenticationState {
+  final String message;
+
+  const AuthenticationFailure({required this.message})
+      : super(status: AuthState.failure);
+
+  @override
+  List<Object> get props => [status, message];
 }

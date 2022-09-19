@@ -4,64 +4,46 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:untis_book_rent_app/api/dto/user/user.dart';
 import 'package:untis_book_rent_app/api/rest/services/auth_service.dart';
+import 'package:untis_book_rent_app/ui/state/repositories/no-user.exception.dart';
 
-enum AuthenticationStatus {
-  unknown,
-  loggingIn,
-  authenticated,
-  loggingOut,
-  unauthenticated
-}
-
-@Singleton(as: IAuthenticationRepository)
-class AuthenticationRepository implements IAuthenticationRepository {
+@Singleton(as: AuthRepository)
+class AuthenticationRepository implements AuthRepository {
   final AuthService _authService;
-  final _controller = StreamController<AuthenticationStatus>();
 
   AuthenticationRepository(this._authService);
-
-  @override
-  Stream<AuthenticationStatus> get status async* {
-    await Future<void>.delayed(const Duration(milliseconds: 400));
-    yield AuthenticationStatus.unauthenticated;
-    yield* _controller.stream;
-  }
 
   @override
   Future<StateUser> logIn({
     required String email,
     required String password,
   }) async {
-    _controller.add(AuthenticationStatus.loggingIn);
     try {
       var user = await _authService
           .login(SignInUserDto(email: email, password: password));
-      _controller.add(AuthenticationStatus.authenticated);
       return StateUser.fromUser(user);
     } catch (error) {
       debugPrint("Login error");
       debugPrint(error.toString());
-      _controller.add(AuthenticationStatus.unauthenticated);
     }
 
     return StateUser.empty;
   }
 
   @override
-  Future<void> logOut() {
-    _controller.add(AuthenticationStatus.unauthenticated);
-    return _authService.logout();
+  Future<StateUser> loadCurrentUser() async {
+    throw NoUserException(message: 'No user is still loggedin');
+    //return Future.delayed(const Duration(milliseconds: 400), () => null);
   }
 
   @override
-  void dispose() => _controller.close();
+  Future<void> logOut() async {
+    await _authService.logout();
+  }
 }
 
-abstract class IAuthenticationRepository {
-  Stream<AuthenticationStatus> get status;
+abstract class AuthRepository {
+  Future<StateUser> loadCurrentUser();
 
   Future<StateUser> logIn({required String email, required String password});
   Future<void> logOut();
-
-  void dispose();
 }
