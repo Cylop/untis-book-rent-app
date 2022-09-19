@@ -30,7 +30,7 @@ abstract class AbstractApiClient<ResultDto extends Decodeable>
 
   @override
   Future<ResponseWrapper<T>> request<T extends Decodeable>({
-    required HttpMethod httpMethod,
+    HttpMethod httpMethod = HttpMethod.get,
     required Create<T> create,
     dynamic data,
     RequestOptions? config,
@@ -69,8 +69,8 @@ abstract class BasicService<ResultDto extends Decodeable, Id, CreateDto,
   @override
   Future<List<ResultDto>> getAllEntities() async {
     var response = await request(
-        httpMethod: HttpMethod.get,
-        create: () => ApiListResponse<ResultDto>(create: () => create()));
+      create: () => ApiListResponse<ResultDto>(create: () => create()),
+    );
 
     final results = response.response?.data ?? [];
     return results;
@@ -79,7 +79,6 @@ abstract class BasicService<ResultDto extends Decodeable, Id, CreateDto,
   @override
   Future<ResultDto> getEntityById(Id id) async {
     var response = await request(
-      httpMethod: HttpMethod.get,
       create: () => ApiResponse<ResultDto>(create: () => create()),
       config: RequestOptions(path: getUrl() + "/" + id),
     );
