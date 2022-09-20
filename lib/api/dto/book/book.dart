@@ -7,21 +7,33 @@ part 'book.g.dart';
 
 @JsonSerializable()
 class Book extends Equatable implements Decodeable<Book> {
-  String? isbn;
+  String? id;
+  String? isbn10;
+  String? isbn13;
   String? title;
-  String? description;
-  String? publisher;
+  String? titleLong;
   String? imageUrl;
+  String? publisher;
   DateTime? publishingDate;
+  int? pages;
+  String? binding;
+  List<String>? authors;
+  int? amount;
   User? createdBy;
 
   Book({
-    this.isbn,
+    this.id,
+    this.isbn10,
+    this.isbn13,
     this.title,
-    this.description,
-    this.publisher,
+    this.titleLong,
     this.imageUrl,
+    this.publisher,
     this.publishingDate,
+    this.pages,
+    this.binding,
+    this.authors,
+    this.amount,
     this.createdBy,
   });
 
@@ -30,12 +42,19 @@ class Book extends Equatable implements Decodeable<Book> {
 
   @override
   List<Object?> get props => [
-        isbn,
+        id,
+        isbn10,
+        isbn13,
         title,
-        description,
-        publisher,
+        titleLong,
         imageUrl,
+        publisher,
         publishingDate,
+        publishingDate,
+        pages,
+        binding,
+        authors,
+        amount,
         createdBy,
       ];
 
@@ -46,20 +65,10 @@ class Book extends Equatable implements Decodeable<Book> {
 @JsonSerializable()
 class CreateBookDto {
   String? isbn;
-  String? title;
-  String? description;
-  String? publisher;
-  String? imageUrl;
-  DateTime? publishingDate;
   int? createdBy;
 
   CreateBookDto({
     this.isbn,
-    this.title,
-    this.description,
-    this.publisher,
-    this.imageUrl,
-    this.publishingDate,
     this.createdBy,
   });
 
@@ -68,6 +77,7 @@ class CreateBookDto {
   Map<String, dynamic> toJson() => _$CreateBookDtoToJson(this);
 }
 
+@Deprecated('Currently not used because books cant be updated manually')
 @JsonSerializable()
 class UpdateBookDto {
   String? title;
