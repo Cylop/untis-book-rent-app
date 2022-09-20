@@ -1,3 +1,4 @@
+import 'package:untis_book_rent_app/api/dto/pagination/pagination.dart';
 import 'package:untis_book_rent_app/api/generic.dart';
 
 class ResponseWrapper<T> extends GenericObject<T> {
@@ -47,6 +48,7 @@ class ApiListResponse<T> extends AbstractApiResponse<T>
   ApiListResponse({required Create<Decodeable> create}) : super(create: create);
 
   late List<T> data;
+  late Pagination pagination;
 
   @override
   ApiListResponse<T> decode(dynamic json) {
@@ -55,6 +57,8 @@ class ApiListResponse<T> extends AbstractApiResponse<T>
     json['data'].forEach((item) {
       data.add(genericObject(item));
     });
+
+    pagination = Pagination.fromJson(json['pagination']);
 
     return this;
   }
