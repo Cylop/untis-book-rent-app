@@ -30,9 +30,18 @@ class BookBloc extends Bloc<BookEvent, BookState> {
       _onBookFetched,
       transformer: throttleDroppable(throttleDuration),
     );
+    on<BookReset>(_onBookReset);
   }
 
   final BookService _bookService;
+
+  Future<void> _onBookReset(
+    BookReset event,
+    Emitter<BookState> emit,
+  ) async {
+    return emit(state.copyWith(
+        status: BookStatus.initial, books: [], hasReachedMax: false));
+  }
 
   Future<void> _onBookFetched(
     BookFetched event,

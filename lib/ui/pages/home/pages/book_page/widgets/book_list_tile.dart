@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:untis_book_rent_app/api/dto/book/book.dart';
+import 'package:untis_book_rent_app/ui/routing/router.gr.dart';
 
 class BookListTile extends StatelessWidget {
   const BookListTile({super.key, required this.book});
@@ -30,6 +32,7 @@ class BookListTile extends StatelessWidget {
       onTap: () {
         /*Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => DetailPage(book)));*/
+        context.router.push(BookDetailRoute(book: book));
       },
       child: Material(
         elevation: 10,
