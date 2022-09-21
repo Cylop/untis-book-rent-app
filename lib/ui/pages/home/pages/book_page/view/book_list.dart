@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/books_bloc/bloc.dart';
 import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/widgets/book_list_tile.dart';
 import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/widgets/bottom_loader.dart';
@@ -30,27 +31,38 @@ class _BookListState extends State<BookList> {
           if (state.books.isEmpty) {
             return const Center(child: Text('no posts'));
           }
-          return ListView.separated(
-            padding: const EdgeInsets.all(10),
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              return index >= state.books.length
-                  ? state.hasReachedMax
-                      ? Center(
-                          child: Text(
-                            'Alle Bücher geladen',
-                            style: Theme.of(context).textTheme.caption,
+          return AnimationLimiter(
+            child: ListView.separated(
+              padding: const EdgeInsets.all(10),
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, int index) {
+                return index >= state.books.length
+                    ? state.hasReachedMax
+                        ? Center(
+                            child: Text(
+                              'Alle Bücher geladen',
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                          )
+                        : const BottomLoader()
+                    : AnimationConfiguration.staggeredList(
+                        position: index,
+                        duration: const Duration(milliseconds: 500),
+                        child: SlideAnimation(
+                          verticalOffset: 50.0,
+                          child: FadeInAnimation(
+                            child: BookListTile(book: state.books[index]),
                           ),
-                        )
-                      : const BottomLoader()
-                  : BookListTile(book: state.books[index]);
-            },
-            separatorBuilder: (BuildContext context, int index) =>
-                const SizedBox(
-              height: 10,
+                        ),
+                      );
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const SizedBox(
+                height: 10,
+              ),
+              itemCount: state.books.length + 1,
+              controller: _scrollController,
             ),
-            itemCount: state.books.length + 1,
-            controller: _scrollController,
           );
         case BookStatus.initial:
           return const Center(child: CircularProgressIndicator());
