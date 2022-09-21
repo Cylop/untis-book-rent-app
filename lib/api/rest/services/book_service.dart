@@ -6,4 +6,7 @@ class BasicBookService extends BasicService<Book, String, CreateBookDto,
   BasicBookService({required super.endpoint}) : super(create: () => Book());
 }
 
-abstract class BookService {}
+abstract class BookService
+    implements
+        AbstractService<Book, String, CreateBookDto, UpdateBookDto,
+            UpdateBookDto> {}
