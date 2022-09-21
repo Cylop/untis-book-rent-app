@@ -6,3 +6,5 @@ abstract class BookEvent extends Equatable {
 }
 
 class BookFetched extends BookEvent {}
+
+class BookReset extends BookEvent {}
