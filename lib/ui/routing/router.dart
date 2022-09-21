@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/empty_router_widgets.dart';
 import 'package:untis_book_rent_app/app.dart';
 import 'package:untis_book_rent_app/ui/pages/home/home.dart';
-import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/book_page.dart';
+import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/view/book_page.dart';
 import 'package:untis_book_rent_app/ui/pages/login/view/login_page.dart';
 
 @MaterialAutoRouter(

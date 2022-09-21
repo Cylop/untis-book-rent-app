@@ -17,7 +17,7 @@ import 'package:flutter/material.dart' as _i7;
 
 import '../../app.dart' as _i1;
 import '../pages/home/home.dart' as _i3;
-import '../pages/home/pages/book_page/book_page.dart' as _i5;
+import '../pages/home/pages/book_page/view/book_page.dart' as _i5;
 import '../pages/login/view/login_page.dart' as _i2;
 
 class AppRouter extends _i6.RootStackRouter {
