@@ -18,7 +18,8 @@ import 'package:flutter/material.dart' as _i8;
 import '../../api/dto/book/book.dart' as _i9;
 import '../../app.dart' as _i1;
 import '../pages/home/home.dart' as _i3;
-import '../pages/home/pages/book_detail_page/book_detail_page.dart' as _i6;
+import '../pages/home/pages/book_page/view/book_detail_page/book_detail_page.dart'
+    as _i6;
 import '../pages/home/pages/book_page/view/book_page.dart' as _i5;
 import '../pages/login/view/login_page.dart' as _i2;
 

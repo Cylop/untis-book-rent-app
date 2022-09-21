@@ -28,34 +28,60 @@ class CreateBookForm extends StatelessWidget {
           Navigator.pop(context, state.isbn.value);
         }
       },
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Flexible(
-                  child: _IsbnInput(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  'Create new Book',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                ElevatedButton(
-                  key: const Key('createBookForm_scanBarCode_raisedButton'),
-                  onPressed: () async {
-                    var isbn = await FlutterBarcodeScanner.scanBarcode(
-                        '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-                    if (!mounted) return;
-                    context
-                        .read<CreateBookBloc>()
-                        .add(CreateBookIsbnChanged(isbn));
-                  },
-                  child: const Icon(Icons.qr_code),
-                )
               ],
             ),
-            const Padding(padding: EdgeInsets.all(12)),
-            _CreateBookButton()
-          ],
-        ),
+          ),
+          Align(
+            alignment: const Alignment(0, -1 / 3),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: _IsbnInput(),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: ElevatedButton(
+                        key: const Key(
+                            'createBookForm_scanBarCode_raisedButton'),
+                        onPressed: () async {
+                          var isbn = await FlutterBarcodeScanner.scanBarcode(
+                              '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+                          if (!mounted) return;
+                          context
+                              .read<CreateBookBloc>()
+                              .add(CreateBookIsbnChanged(isbn));
+                        },
+                        child: const Icon(Icons.qr_code),
+                      ),
+                    )
+                  ],
+                ),
+                const Padding(padding: EdgeInsets.all(12)),
+                _CreateBookButton()
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
