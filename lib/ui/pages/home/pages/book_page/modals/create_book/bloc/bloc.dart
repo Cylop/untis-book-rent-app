@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:untis_book_rent_app/api/dto/book/book.dart';
+import 'package:untis_book_rent_app/api/rest/services/book_service.dart';
+import 'package:untis_book_rent_app/api/rest/services/user_service.dart';
 import 'package:untis_book_rent_app/injection.dart';
 import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/modals/create_book/models/email.dart';
 
@@ -12,10 +15,12 @@ part 'state.dart';
 
 @injectable
 class CreateBookBloc extends Bloc<CreateBookEvent, CreateBookState> {
-  CreateBookBloc() : super(const CreateBookState()) {
+  CreateBookBloc(this._bookService) : super(const CreateBookState()) {
     on<CreateBookIsbnChanged>(_onIsbnChanged);
     on<CreateBookSubmitted>(_onSubmitted);
   }
+
+  BookService _bookService;
 
   void _onIsbnChanged(
     CreateBookIsbnChanged event,
@@ -37,6 +42,8 @@ class CreateBookBloc extends Bloc<CreateBookEvent, CreateBookState> {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       try {
+        await _bookService
+            .createEntity(CreateBookDto(isbn: state.isbn.value, createdBy: 4));
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
         //_authenticationBloc.add(UserLoggedIn(user: user));
       } catch (error) {

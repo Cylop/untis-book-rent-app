@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
           //type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.grey,
+          elevation: 10,
         );
       },
     );

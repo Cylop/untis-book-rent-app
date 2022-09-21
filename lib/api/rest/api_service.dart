@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:untis_book_rent_app/api/api_response.dart';
+import 'package:untis_book_rent_app/api/dto/pagination/pagination.dart';
 import 'package:untis_book_rent_app/api/generic.dart';
 
 abstract class BaseApiClient {
@@ -33,16 +34,16 @@ abstract class AbstractApiClient<ResultDto extends Decodeable>
     HttpMethod httpMethod = HttpMethod.get,
     required Create<T> create,
     dynamic data,
+    Map<String, dynamic>? queryParams,
     RequestOptions? config,
   }) async {
     config ??= RequestOptions(path: getUrl(), method: httpMethod.method);
     config.method = httpMethod.method;
     if (data != null) {
-      if (httpMethod == HttpMethod.get) {
-        config.queryParameters = data;
-      } else {
-        config.data = data;
-      }
+      config.data = data;
+    }
+    if (queryParams != null) {
+      config.queryParameters = queryParams;
     }
     try {
       final response = await dio.fetch(config);
@@ -54,7 +55,7 @@ abstract class AbstractApiClient<ResultDto extends Decodeable>
 }
 
 abstract class AbstractService<ResultDto, Id, CreateDto, UpdateDto, DeleteDto> {
-  Future<List<ResultDto>> getAllEntities();
+  Future<Paginated<ResultDto>> getAllEntities({int? page, int? pageSize});
   Future<ResultDto> getEntityById(Id id);
   Future<ResultDto> createEntity(CreateDto? value);
   Future<ResultDto> deleteEntity(Id id, CreateDto? value);
@@ -67,13 +68,15 @@ abstract class BasicService<ResultDto extends Decodeable, Id, CreateDto,
   BasicService({required super.endpoint, required super.create});
 
   @override
-  Future<List<ResultDto>> getAllEntities() async {
+  Future<Paginated<ResultDto>> getAllEntities(
+      {int? page = 1, int? pageSize = 25}) async {
     var response = await request(
       create: () => ApiListResponse<ResultDto>(create: () => create()),
+      queryParams: {"page": page, "pageSize": pageSize},
     );
 
     final results = response.response?.data ?? [];
-    return results;
+    return Paginated(data: results, pagination: response.response?.pagination);
   }
 
   @override
@@ -125,6 +128,13 @@ abstract class BasicService<ResultDto extends Decodeable, Id, CreateDto,
     final entity = response.response!.data;
     return entity;
   }
+}
+
+class Paginated<T> {
+  List<T> data = [];
+  Pagination? pagination;
+
+  Paginated({required this.data, this.pagination});
 }
 
 enum HttpMethod {
