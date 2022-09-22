@@ -15,7 +15,7 @@ abstract class AbstractApiClient<ResultDto extends Decodeable>
     extends GenericObject<ResultDto> implements BaseApiClient {
   Dio dio = Dio();
 
-  String baseUrl = 'http://localhost:3000';
+  String baseUrl = 'http://10.0.2.2:3000';
   String apiSegment = '/api/v1/';
   final String endpoint;
 
