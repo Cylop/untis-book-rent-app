@@ -4,6 +4,7 @@ import 'package:untis_book_rent_app/app.dart';
 import 'package:untis_book_rent_app/ui/pages/home/home.dart';
 import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/view/book_detail_page/book_detail_page.dart';
 import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/view/book_page.dart';
+import 'package:untis_book_rent_app/ui/pages/home/pages/class_page/view/class_page.dart';
 import 'package:untis_book_rent_app/ui/pages/login/view/login_page.dart';
 
 @MaterialAutoRouter(
@@ -32,7 +33,18 @@ import 'package:untis_book_rent_app/ui/pages/login/view/login_page.dart';
             //AutoRoute(path: ':bookId', page: BookDetailsPage),
             RedirectRoute(path: '*', redirectTo: ''),
           ],
-        )
+        ),
+        AutoRoute(
+          path: 'classes',
+          name: "ClassRouter",
+          page: EmptyRouterPage,
+          children: [
+            AutoRoute(path: '', page: ClassPage),
+            //AutoRoute(path: ':isbn', page: BookDetailPage),
+            //AutoRoute(path: ':bookId', page: BookDetailsPage),
+            RedirectRoute(path: '*', redirectTo: ''),
+          ],
+        ),
       ],
     ),
   ],
