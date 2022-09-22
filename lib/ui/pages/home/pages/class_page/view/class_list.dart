@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/books_bloc/bloc.dart';
-import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/widgets/book_list_tile.dart';
 import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/widgets/bottom_loader.dart';
+import 'package:untis_book_rent_app/ui/pages/home/pages/class_page/class_bloc/bloc.dart';
+import 'package:untis_book_rent_app/ui/pages/home/pages/class_page/widgets/class_list_tile.dart';
 import 'package:untis_book_rent_app/ui/pages/home/widgets/reached_list_end.dart';
 
-class BookList extends StatefulWidget {
-  const BookList({Key? key}) : super(key: key);
+class ClassList extends StatefulWidget {
+  const ClassList({Key? key}) : super(key: key);
 
   @override
-  _BookListState createState() => _BookListState();
+  State<ClassList> createState() => _ClassListState();
 }
 
-class _BookListState extends State<BookList> {
+class _ClassListState extends State<ClassList> {
   final _scrollController = ScrollController();
 
   @override
@@ -24,23 +24,23 @@ class _BookListState extends State<BookList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BookBloc, BookState>(builder: (context, state) {
+    return BlocBuilder<ClassBloc, ClassState>(builder: (context, state) {
       switch (state.status) {
-        case BookStatus.failure:
-          return const Center(child: Text('failed to fetch posts'));
-        case BookStatus.success:
-          if (state.books.isEmpty) {
-            return const Center(child: Text('no posts'));
+        case ClassStatus.failure:
+          return const Center(child: Text('Klassen konnten nicht geladen werden'));
+        case ClassStatus.success:
+          if (state.classes.isEmpty) {
+            return const Center(child: Text('Keine Klassen vorhanden'));
           }
           return AnimationLimiter(
             child: ListView.separated(
               padding: const EdgeInsets.all(10),
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
-                return index >= state.books.length
+                return index >= state.classes.length
                     ? state.hasReachedMax
                         ? const ReachedEnd(
-                            message: 'Alle Bücher geladen',
+                            message: 'Alle Klassen geladen',
                           )
                         : const BottomLoader()
                     : AnimationConfiguration.staggeredList(
@@ -49,7 +49,7 @@ class _BookListState extends State<BookList> {
                         child: SlideAnimation(
                           verticalOffset: 50.0,
                           child: FadeInAnimation(
-                            child: BookListTile(book: state.books[index]),
+                            child: ClassListTile(schoolClass: state.classes[index]),
                           ),
                         ),
                       );
@@ -58,11 +58,11 @@ class _BookListState extends State<BookList> {
                   const SizedBox(
                 height: 10,
               ),
-              itemCount: state.books.length + 1,
+              itemCount: state.classes.length + 1,
               controller: _scrollController,
             ),
           );
-        case BookStatus.initial:
+        case ClassStatus.initial:
           return const Center(child: CircularProgressIndicator());
       }
     });
@@ -77,7 +77,7 @@ class _BookListState extends State<BookList> {
   }
 
   void _onScroll() {
-    if (_isBottom) context.read<BookBloc>().add(BookFetched());
+    if (_isBottom) context.read<ClassBloc>().add(ClassFetched());
   }
 
   bool get _isBottom {

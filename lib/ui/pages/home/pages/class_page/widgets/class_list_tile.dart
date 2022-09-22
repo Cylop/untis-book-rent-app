@@ -1,30 +1,10 @@
-import 'dart:math';
-
-import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:untis_book_rent_app/api/dto/book/book.dart';
-import 'package:untis_book_rent_app/ui/routing/router.gr.dart';
+import 'package:untis_book_rent_app/api/dto/class/class.dart';
 
-class BookListTile extends StatelessWidget {
-  const BookListTile({super.key, required this.book});
+class ClassListTile extends StatelessWidget {
+  const ClassListTile({super.key, required this.schoolClass});
 
-  final Book book;
-
-  _formatAuthors(List<String> authors) {
-    var endIndex = 1;
-    var authorsJoined = "";
-    var splitted = authors.getRange(0, min(endIndex, authors.length));
-    authorsJoined = splitted.join(", ");
-    if (splitted.length == authors.length) return authorsJoined;
-    var rest = authors.getRange(endIndex, authors.length);
-
-    if (rest.isNotEmpty) {
-      authorsJoined += ", +${rest.length} more";
-    }
-    return authorsJoined;
-  }
+  final SchoolClass schoolClass;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +12,7 @@ class BookListTile extends StatelessWidget {
       onTap: () {
         /*Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => DetailPage(book)));*/
-        context.router.push(BookDetailRoute(book: book));
+        //context.router.push(BookDetailRoute(book: book));
       },
       child: Material(
         elevation: 10,
@@ -45,25 +25,6 @@ class BookListTile extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl: book.imageUrl!,
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              CircularProgressIndicator(
-                                  value: downloadProgress.progress),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
                   flex: 5,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +34,7 @@ class BookListTile extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              book.title!,
+                              schoolClass.label!,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -87,15 +48,11 @@ class BookListTile extends StatelessWidget {
                           )*/
                         ],
                       ),
-                      Text(
-                        _formatAuthors(book.authors!),
-                        style: const TextStyle(color: Colors.grey),
-                      ),
                       const SizedBox(
                         height: 15,
                       ),
                       Text(
-                        book.titleLong!,
+                        schoolClass.name!,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(color: Colors.grey),
                       ),
@@ -108,22 +65,14 @@ class BookListTile extends StatelessWidget {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0),
-                            child: _buildIconText(Icons.warehouse_outlined,
-                                Colors.grey[300]!, '${book.amount}'),
+                            child: _buildIconText(Icons.school_outlined,
+                                Colors.grey[300]!, '${schoolClass.studentCount}'),
                           ),
-
-                          /*Expanded(
-                            flex: 1,
-                            child: _buildIconText(
-                              Icons.visibility,
-                              Colors.white,
-                              '7.8M Read',
-                            ),
-                          ),*/
                         ],
                       ),
                     ],
-                  ))
+                  ),
+              ),
             ],
           ),
         ),
