@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:untis_book_rent_app/api/dto/book/book.dart';
+import 'package:untis_book_rent_app/api/dto/class/class.dart';
 import 'package:untis_book_rent_app/api/rest/api_service.dart';
 import 'package:untis_book_rent_app/api/rest/services/book_service.dart';
+import 'package:untis_book_rent_app/api/rest/services/class_service.dart';
 
 part 'event.dart';
 part 'state.dart';
@@ -24,66 +26,60 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 }
 
 @injectable
-class BookBloc extends Bloc<BookEvent, BookState> {
-  BookBloc(this._bookService) : super(const BookState()) {
-    on<BookFetched>(
-      _onBookFetched,
+class ClassBloc extends Bloc<ClassEvent, ClassState> {
+  ClassBloc(this._classService) : super(const ClassState()) {
+    on<ClassFetched>(
+      _onClassFetched,
       transformer: throttleDroppable(throttleDuration),
     );
-    on<BookReset>(_onBookReset);
+    on<ClassReset>(_onClassReset);
   }
 
-  final BookService _bookService;
+  final ClassService _classService;
 
-  Future<void> _onBookReset(
-    BookReset event,
-    Emitter<BookState> emit,
+  Future<void> _onClassReset(
+    ClassReset event,
+    Emitter<ClassState> emit,
   ) async {
     return emit(state.copyWith(
-        status: BookStatus.initial, books: [], hasReachedMax: false));
+        status: ClassStatus.initial, classes: [], hasReachedMax: false));
   }
 
-  Future<void> _onBookFetched(
-    BookFetched event,
-    Emitter<BookState> emit,
+  Future<void> _onClassFetched(
+      ClassFetched event,
+    Emitter<ClassState> emit,
   ) async {
     if (state.hasReachedMax) return;
     try {
-      if (state.status == BookStatus.initial) {
-        final posts = await _fetchPosts();
+      if (state.status == ClassStatus.initial) {
+        final classes = await _fetchClasses();
         return emit(
           state.copyWith(
-            status: BookStatus.success,
-            books: posts,
-            hasReachedMax: false,
+            status: ClassStatus.success,
+            classes: classes,
+            hasReachedMax: classes.length < _pageSize,
           ),
         );
       }
-      final books = await _fetchPosts(state.books.length);
-      books.isEmpty
+      final classes = await _fetchClasses(state.classes.length);
+      classes.isEmpty
           ? emit(state.copyWith(hasReachedMax: true))
           : emit(
               state.copyWith(
-                status: BookStatus.success,
-                books: List.of(state.books)..addAll(books),
+                status: ClassStatus.success,
+                classes: List.of(state.classes)..addAll(classes),
                 hasReachedMax: false,
               ),
             );
     } catch (_) {
-      emit(state.copyWith(status: BookStatus.failure));
+      emit(state.copyWith(status: ClassStatus.failure));
     }
   }
 
-  Future<List<Book>> _fetchPosts([int startIndex = 0]) async {
+  Future<List<SchoolClass>> _fetchClasses([int startIndex = 0]) async {
     var page = (startIndex / _pageSize).ceil() + 1;
-    debugPrint("Index: $startIndex");
-    debugPrint("Page to load: $page");
-    Paginated<Book> paginatedResult =
-        await _bookService.getAllEntities(page: page, pageSize: _pageSize);
-    debugPrint("List length ${paginatedResult.data.length}");
-    debugPrint("Current page from api: ${paginatedResult.pagination?.page}");
-    debugPrint(
-        "Total pages from api: ${paginatedResult.pagination?.totalPages}");
+    Paginated<SchoolClass> paginatedResult =
+        await _classService.getAllEntities(page: page, pageSize: _pageSize);
     return paginatedResult.data;
   }
 }

@@ -1,35 +1,35 @@
 part of 'bloc.dart';
 
-enum BookStatus { initial, success, failure }
+enum ClassStatus { initial, success, failure }
 
-class BookState extends Equatable {
-  const BookState({
-    this.status = BookStatus.initial,
-    this.books = const <Book>[],
+class ClassState extends Equatable {
+  const ClassState({
+    this.status = ClassStatus.initial,
+    this.classes = const <SchoolClass>[],
     this.hasReachedMax = false,
   });
 
-  final BookStatus status;
-  final List<Book> books;
+  final ClassStatus status;
+  final List<SchoolClass> classes;
   final bool hasReachedMax;
 
-  BookState copyWith({
-    BookStatus? status,
-    List<Book>? books,
+  ClassState copyWith({
+    ClassStatus? status,
+    List<SchoolClass>? classes,
     bool? hasReachedMax,
   }) {
-    return BookState(
+    return ClassState(
       status: status ?? this.status,
-      books: books ?? this.books,
+      classes: classes ?? this.classes,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
   @override
   String toString() {
-    return '''BookState { status: $status, hasReachedMax: $hasReachedMax, posts: ${books.length} }''';
+    return '''ClassState { status: $status, hasReachedMax: $hasReachedMax, classes: ${classes.length} }''';
   }
 
   @override
-  List<Object> get props => [status, books, hasReachedMax];
+  List<Object> get props => [status, classes, hasReachedMax];
 }

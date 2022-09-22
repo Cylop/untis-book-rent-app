@@ -1,10 +1,10 @@
 part of 'bloc.dart';
 
-abstract class BookEvent extends Equatable {
+abstract class ClassEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class BookFetched extends BookEvent {}
+class ClassFetched extends ClassEvent {}
 
-class BookReset extends BookEvent {}
+class ClassReset extends ClassEvent {}
