@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
     return AutoTabsScaffold(
       routes: const [
         BooksRouter(),
-        BooksRouter(),
+        ClassRouter(),
         BooksRouter(),
         BooksRouter(),
       ],
