@@ -50,16 +50,16 @@ class BookBloc extends Bloc<BookEvent, BookState> {
     if (state.hasReachedMax) return;
     try {
       if (state.status == BookStatus.initial) {
-        final posts = await _fetchPosts();
+        final books = await _fetchBooks();
         return emit(
           state.copyWith(
             status: BookStatus.success,
-            books: posts,
-            hasReachedMax: false,
+            books: books,
+            hasReachedMax: books.length < _pageSize,
           ),
         );
       }
-      final books = await _fetchPosts(state.books.length);
+      final books = await _fetchBooks(state.books.length);
       books.isEmpty
           ? emit(state.copyWith(hasReachedMax: true))
           : emit(
@@ -74,16 +74,10 @@ class BookBloc extends Bloc<BookEvent, BookState> {
     }
   }
 
-  Future<List<Book>> _fetchPosts([int startIndex = 0]) async {
+  Future<List<Book>> _fetchBooks([int startIndex = 0]) async {
     var page = (startIndex / _pageSize).ceil() + 1;
-    debugPrint("Index: $startIndex");
-    debugPrint("Page to load: $page");
     Paginated<Book> paginatedResult =
         await _bookService.getAllEntities(page: page, pageSize: _pageSize);
-    debugPrint("List length ${paginatedResult.data.length}");
-    debugPrint("Current page from api: ${paginatedResult.pagination?.page}");
-    debugPrint(
-        "Total pages from api: ${paginatedResult.pagination?.totalPages}");
     return paginatedResult.data;
   }
 }
