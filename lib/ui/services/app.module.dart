@@ -34,6 +34,11 @@ abstract class AppModule {
   @injectable
   ClassService get classService => BasicClassService(endpoint: 'classes');
 
-  @Named('animatedBookList')
-  AnimatedInfiniteScrollingBloc<Book> get animatedBookList => AnimatedInfiniteScrollingBloc(bookService);
+  @Named('animatedBookListBloc')
+  AnimatedInfiniteScrollingBloc<Book> get animatedBookListBloc =>
+      AnimatedInfiniteScrollingBloc(bookService);
+
+  @Named('animatedClassListBloc')
+  AnimatedInfiniteScrollingBloc<Book> get animatedClassListBloc =>
+      AnimatedInfiniteScrollingBloc(bookService);
 }
