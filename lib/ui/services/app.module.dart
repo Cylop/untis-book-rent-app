@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:untis_book_rent_app/api/dto/book/book.dart';
+import 'package:untis_book_rent_app/api/dto/class/class.dart';
 import 'package:untis_book_rent_app/api/rest/services/auth_service.dart';
 import 'package:untis_book_rent_app/api/rest/services/book_rent_service.dart';
 import 'package:untis_book_rent_app/api/rest/services/book_service.dart';
@@ -39,6 +40,6 @@ abstract class AppModule {
       AnimatedInfiniteScrollingBloc(bookService);
 
   @Named('animatedClassListBloc')
-  AnimatedInfiniteScrollingBloc<Book> get animatedClassListBloc =>
-      AnimatedInfiniteScrollingBloc(bookService);
+  AnimatedInfiniteScrollingBloc<SchoolClass> get animatedClassListBloc =>
+      AnimatedInfiniteScrollingBloc(classService);
 }

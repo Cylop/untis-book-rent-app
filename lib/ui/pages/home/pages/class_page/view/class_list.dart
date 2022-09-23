@@ -11,7 +11,7 @@ class ClassList extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedInfiniteScrollingBlocList<SchoolClass>(
       entityName: 'Classes',
-      bloc: locator(instanceName: 'animatedBookListBloc'),
+      bloc: locator(instanceName: 'animatedClassListBloc'),
       builder: (context, entity) => ClassListTile(schoolClass: entity),
     );
   }
