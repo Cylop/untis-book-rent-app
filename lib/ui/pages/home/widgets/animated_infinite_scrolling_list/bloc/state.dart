@@ -10,7 +10,7 @@ class AnimatedInfiniteScrollingBlocListState<E> extends Equatable {
 
   const AnimatedInfiniteScrollingBlocListState({ this.status = LoadingStatus.initial, this.entities = const [], this.hasReachedMax = false, });
 
-  AnimatedInfiniteScrollingBlocListState copyWith({
+  AnimatedInfiniteScrollingBlocListState<E> copyWith({
     LoadingStatus? status,
     List<E>? entities,
     bool? hasReachedMax,
