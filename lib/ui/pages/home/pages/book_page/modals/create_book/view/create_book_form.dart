@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:untis_book_rent_app/injection.dart';
-import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/books_bloc/bloc.dart';
 import 'package:untis_book_rent_app/ui/pages/home/pages/book_page/modals/create_book/bloc/bloc.dart';
-import 'package:untis_book_rent_app/ui/pages/login/login.dart';
 
 class CreateBookForm extends StatelessWidget {
   const CreateBookForm({super.key});
@@ -24,7 +21,7 @@ class CreateBookForm extends StatelessWidget {
             );
         }
         if (state.status.isSubmissionSuccess) {
-          locator<BookBloc>().add(BookReset());
+          //locator<BookBloc>().add(BookReset());
           Navigator.pop(context, state.isbn.value);
         }
       },
